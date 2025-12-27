@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Hipotenusa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        .resultado {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+        
+        .resultado.show {
+            display: block;
+        }
+        
+        .resultado h2 {
+            color: #667eea;
+            margin: 0 0 10px 0;
+        }
+        
+        .resultado p {
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📐 Calculadora de Hipotenusa</h1>
+        
+        <div class="input-group">
+            <label for="lado1">Medida do primeiro lado:</label>
+            <input type="number" id="lado1" step="0.01" placeholder="Digite o valor">
+        </div>
+        
+        <div class="input-group">
+            <label for="lado2">Medida do segundo lado:</label>
+            <input type="number" id="lado2" step="0.01" placeholder="Digite o valor">
+        </div>
+        
+        <button onclick="calcular()">Calcular Hipotenusa</button>
+        
+        <div class="resultado" id="resultado">
+            <h2>Resultado:</h2>
+            <p id="valorHipotenusa"></p>
+        </div>
+    </div>
+
+    <script>
+        async function calcular() {
+            const lado1 = document.getElementById('lado1').value;
+            const lado2 = document.getElementById('lado2').value;
+            
+            if (!lado1 || !lado2) {
+                alert('Por favor, preencha ambos os campos!');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/calcular?lado1=${lado1}&lado2=${lado2}`);
+                const data = await response.json();
+                
+                const hipotenusaFormatada = data.hipotenusa.toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+                
+                document.getElementById('valorHipotenusa').textContent = hipotenusaFormatada;
+                document.getElementById('resultado').classList.add('show');
+            } catch (error) {
+                alert('Erro ao calcular. Tente novamente!');
+            }
+        }
+        
+        // Permitir calcular ao pressionar Enter
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                calcular();
+            }
+        });
+    </script>
+</body>
+</html>
