@@ -1,12 +1,4 @@
 {
-  "rewrites": [
-    {
-      "source": "/calcular",
-      "destination": "/api/calcular"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/public/$1"
-    }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": false
 }
